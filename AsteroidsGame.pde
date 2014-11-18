@@ -1,7 +1,6 @@
 SpaceShip ship;
 Star [] backgroundStars;
 ArrayList <Asteroid> rocks= new ArrayList<Asteroid>();
-float x1, x2, y1, y2;
 public void setup() 
 {
   size (800, 800);
@@ -57,8 +56,8 @@ public void draw()
 
 
 class Star
-  int x, y;
 {
+  int x, y;
   Star()
   {
     x=(int)(Math.random()*width);

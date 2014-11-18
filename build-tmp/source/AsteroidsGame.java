@@ -17,7 +17,6 @@ public class AsteroidsGame extends PApplet {
 SpaceShip ship;
 Star [] backgroundStars;
 ArrayList <Asteroid> rocks= new ArrayList<Asteroid>();
-float x1, x2, y1, y2;
 public void setup() 
 {
   size (800, 800);
