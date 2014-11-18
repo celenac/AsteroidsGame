@@ -1,7 +1,7 @@
 SpaceShip ship;
-Asteroid [] rocks;
 Star [] backgroundStars;
-boolean gameOver=false;
+ArrayList <Asteroid> rocks= new ArrayList<Asteroid>();
+float x1, x2, y1, y2;
 public void setup() 
 {
   size (800, 800);
@@ -14,10 +14,10 @@ public void setup()
   {
     backgroundStars[i]=new Star();
   }
-  rocks=new Asteroid[11];
-  for (int i=0; i<rocks.length; i++)
+  rocks= new ArrayList<Asteroid>();
+  for (int i=0; i<10; i++)
   {
-    rocks[i]=new Asteroid();
+    rocks.add(new Asteroid());
   }
 }
 
@@ -27,8 +27,6 @@ public void draw()
 {
   fill(0);
   rect(0, 0, width, height);
-  ship.collide();
-  //ship.gameOver();
   ship.show();
   ship.move();
   ship.rotate(3, -3);
@@ -36,11 +34,16 @@ public void draw()
   {
     backgroundStars[i].show();
   }
-  for (int i=0; i<rocks.length; i++) //asteroids
+  for (int i=0; i<rocks.size(); i++) //asteroids
   {
-    rocks[i].show();
-    rocks[i].move();
-    rocks[i].rotate(2);
+    rocks.get(i).show();
+    rocks.get(i).move();
+    rocks.get(i).rotate(2);
+    float d=dist(rocks.get(i).getX(), rocks.get(i).getY(), ship.getX(), ship.getY());
+    if(d<30)
+    {
+      rocks.remove(i);
+    }
   }
   if (keyPressed==true && keyCode==UP) //ship 
   {
@@ -49,18 +52,13 @@ public void draw()
   {
     ship.accelerate(-0.1);
   }
-  if(gameOver==true) //work on game over code
-  {
-    stop();
-  }
-
 }
 
 
 
 class Star
-{
   int x, y;
+{
   Star()
   {
     x=(int)(Math.random()*width);
@@ -83,12 +81,12 @@ class SpaceShip extends Floater
     corners=3;  //the number of corners, a triangular floater has 3   
     xCorners=new int[corners];
     yCorners=new int[corners];
-    xCorners[0]=10;
+    xCorners[0]=15;
     yCorners[0]=0;
-    xCorners[1]=-6;
-    yCorners[1]=4;
-    xCorners[2]=-6;
-    yCorners[2]=-4;
+    xCorners[1]=-11;
+    yCorners[1]=9;
+    xCorners[2]=-11;
+    yCorners[2]=-9;
     myColor=color(255,255,0);   
     myCenterX=width/2;
     myCenterY=height/2;
@@ -109,20 +107,6 @@ class SpaceShip extends Floater
       myPointDirection+=nDegreesOfRotation2;
     }
   }  
-
-   public void collide()
-   {
-      for(int i=0; i<50; i++)
-      {
-        if(color(255)==get((int)myCenterX+i,(int)myCenterY+i))
-        {
-          fill(255,0,100);
-          textSize(32);
-          text("Game Over", (width/2)-80, height/2);
-          gameOver=true;
-        }
-     }
-   }
 
   public void show ()  //Draws the floater at the current position  
   {             
@@ -158,13 +142,7 @@ class SpaceShip extends Floater
     // }
   }
 
-   // public void gameOver()
-   // {
-   //  if(gameOver==true)
-   //  {
-   //    stop();
-   //  }
-   // }
+  
 
   public void setX(int x) {
     myCenterX=x;
@@ -222,8 +200,8 @@ class Asteroid extends Floater
     myColor=color(255);   
     myCenterX=Math.random()*width;
     myCenterY=Math.random()*height;    
-    myDirectionX=Math.random()*2;
-    myDirectionY=Math.random()*2;    
+    myDirectionX=(Math.random()*4)-2;
+    myDirectionY=(Math.random()*4)-2;
     myPointDirection=Math.random()*360;
   }
 public void setX(int x) {
@@ -257,6 +235,7 @@ public void setX(int x) {
     return myPointDirection;
   }
 }
+
 
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
