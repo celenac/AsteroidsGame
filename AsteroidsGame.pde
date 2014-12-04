@@ -1,13 +1,15 @@
 SpaceShip ship;
 Star [] backgroundStars;
-ArrayList <Asteroid> rocks= new ArrayList<Asteroid>();
+ArrayList <Asteroid> rocks= new ArrayList <Asteroid>();
+ArrayList <Bullet> bullets=new ArrayList <Bullet>();
 public void setup() 
 {
   size (800, 800);
   strokeWeight(1);
   stroke(100);
   background(0);
-  ship= new SpaceShip();
+  ship=new SpaceShip();
+  bullets=new ArrayList <Bullet> ();
   backgroundStars= new Star[200];
   for (int i=0; i<backgroundStars.length; i++)
   {
@@ -20,6 +22,14 @@ public void setup()
   }
 }
 
+void keyPressed()
+{
+  if(keyCode==SHIFT)
+  {
+    bullets.add(new Bullet(ship));
+  }
+}
+
 
 
 public void draw() 
@@ -29,6 +39,11 @@ public void draw()
   ship.show();
   ship.move();
   ship.rotate(3, -3);
+  for(int i=0; i<bullets.size(); i++)
+  {
+    bullets.get(i).show();
+    bullets.get(i).move();
+  }
   for (int i=0; i<backgroundStars.length; i++) //stars
   {
     backgroundStars[i].show();
@@ -39,9 +54,29 @@ public void draw()
     rocks.get(i).move();
     rocks.get(i).rotate(2);
     float d=dist(rocks.get(i).getX(), rocks.get(i).getY(), ship.getX(), ship.getY());
+    if(rocks.size()==1)
+    {
+     for (int z=0; z<10; z++)
+      {
+        rocks.add(new Asteroid());
+      }
+    }
     if(d<30)
     {
       rocks.remove(i);
+    }
+  }
+  for(int k=0; k<bullets.size(); k++)
+  {
+      if(bullets.get(k).getX()>width || bullets.get(k).getX()<0)
+    {
+      bullets.remove(k);
+      break;
+    }
+      if(bullets.get(k).getY()>height || bullets.get(k).getY()<0)
+    {
+      bullets.remove(k);
+      break;
     }
   }
   if (keyPressed==true && keyCode==UP) //ship 
@@ -83,9 +118,9 @@ class SpaceShip extends Floater
     xCorners[0]=15;
     yCorners[0]=0;
     xCorners[1]=-11;
-    yCorners[1]=9;
+    yCorners[1]=7;
     xCorners[2]=-11;
-    yCorners[2]=-9;
+    yCorners[2]=-7;
     myColor=color(255,255,0);   
     myCenterX=width/2;
     myCenterY=height/2;
@@ -131,19 +166,68 @@ class SpaceShip extends Floater
     myDirectionY=0;   
     myPointDirection=Math.random()*360;
     }
-    // if(keyPressed==true && key==SHIFT)//shooting code
-    // {
-    //   int x=2;
-    //   for(int i=0; i<100; i++)
-    //   {
-    //     point(xRotatedTranslated+x, yRotatedTranslated+x); //find how to shoot in direction// figure out code above
-    //   }
-    // }
   }
 
-  
-
   public void setX(int x) {
+    myCenterX=x;
+  }  
+  public int getX() {
+    return (int)myCenterX;
+  }   
+  public void setY(int y) {
+    myCenterY=y;
+  }   
+  public int getY() {
+    return (int)myCenterY;
+  }   
+  public void setDirectionX(double x) {
+    myDirectionX=x;
+  }   
+  public double getDirectionX() {
+    return myDirectionX;
+  }   
+  public void setDirectionY(double y) {
+    myDirectionY=y;
+  }   
+  public double getDirectionY() {
+    return myDirectionY;
+  }   
+  public void setPointDirection(int degrees) {
+    myPointDirection=degrees;
+  }   
+  public double getPointDirection() {
+    return myPointDirection;
+  }
+}
+
+
+
+class Bullet extends Floater{
+  double dRadians;
+  Bullet(SpaceShip theShip)
+  {
+    myColor=color(255,255,0);
+    myCenterX=theShip.getX();
+    myCenterY=theShip.getY();
+    myPointDirection=theShip.getPointDirection();
+    dRadians=myPointDirection*(Math.PI/180);
+    myDirectionX=12*(Math.cos(dRadians))+theShip.getDirectionX();
+    myDirectionY=12*(Math.sin(dRadians))+theShip.getDirectionY();
+  }
+  public void show ()  //Draws the floater at the current position  
+  {             
+    fill(myColor);   
+    stroke(myColor);                             
+    ellipse((float)myCenterX,(float)myCenterY,2,2);
+  }
+   public void move ()   //move the floater in the current direction of travel
+  {      
+    //change the x and y coordinates by myDirectionX and myDirectionY       
+    myCenterX += myDirectionX;    
+    myCenterY += myDirectionY;
+  }
+
+    public void setX(int x) {
     myCenterX=x;
   }  
   public int getX() {
@@ -182,7 +266,7 @@ class Asteroid extends Floater
   int rockSize;
   Asteroid()
   {
-    rockSize=(int)(Math.random()*3)+1;
+    rockSize=(int)(Math.random()*4)+1;
     corners=5;    
     xCorners=new int [corners];   
     yCorners=new int [corners]; 
@@ -191,7 +275,7 @@ class Asteroid extends Floater
     xCorners[1]=10*rockSize;
     yCorners[1]=8*rockSize;
     xCorners[2]=8*rockSize;
-    yCorners[2]=-9*rockSize;
+    yCorners[2]=-10*rockSize;
     xCorners[3]=-8*rockSize;
     yCorners[3]=-8*rockSize;
     xCorners[4]=-11*rockSize;
@@ -203,6 +287,43 @@ class Asteroid extends Floater
     myDirectionY=(Math.random()*4)-2;
     myPointDirection=Math.random()*360;
   }
+   public void move ()   //move the floater in the current direction of travel
+  {      
+    //change the x and y coordinates by myDirectionX and myDirectionY       
+    myCenterX += myDirectionX;    
+    myCenterY += myDirectionY;     
+
+    //wrap around screen    
+    if (myCenterX >width)
+    {     
+      myCenterX = 0;
+    } else if (myCenterX<0)
+    {     
+      myCenterX = width;
+    }    
+    if (myCenterY >height)
+    {    
+      myCenterY = 0;
+    } else if (myCenterY < 0)
+    {     
+      myCenterY = height;
+    }
+
+    //check if colliding with bullet
+    for(int i=0; i<bullets.size(); i++)
+    {
+      for (int w=0; w<rocks.size();w++)
+      {
+          if(dist((float)(bullets.get(i).myCenterX),(float)(bullets.get(i).myCenterY),(float)(rocks.get(w).myCenterX),(float)(rocks.get(w).myCenterY))<=20)
+          {
+            bullets.remove(i);
+            rocks.remove(w);
+            break;
+         }
+      }
+    }
+  }   
+
 public void setX(int x) {
     myCenterX=x;
   }  
@@ -233,6 +354,7 @@ public void setX(int x) {
   public double getPointDirection() {
     return myPointDirection;
   }
+
 }
 
 
