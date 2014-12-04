@@ -2,6 +2,8 @@ SpaceShip ship;
 Star [] backgroundStars;
 ArrayList <Asteroid> rocks= new ArrayList <Asteroid>();
 ArrayList <Bullet> bullets=new ArrayList <Bullet>();
+ArrayList <Integer> numberShot=new ArrayList <Integer>();
+boolean gameOver=false;
 public void setup() 
 {
   size (800, 800);
@@ -24,9 +26,14 @@ public void setup()
 
 void keyPressed()
 {
-  if(keyCode==SHIFT)
+  if(keyCode==32)
   {
     bullets.add(new Bullet(ship));
+  }
+  if(key=='r')
+  {
+    setup();
+    gameOver=false;
   }
 }
 
@@ -64,6 +71,9 @@ public void draw()
     if(d<30)
     {
       rocks.remove(i);
+      gameOver=true;
+      ship.setDirectionX(0);
+      ship.setDirectionY(0);
     }
   }
   for(int k=0; k<bullets.size(); k++)
@@ -86,8 +96,19 @@ public void draw()
   {
     ship.accelerate(-0.1);
   }
-}
 
+  //Game Over
+  if(gameOver==true)
+  {
+    fill(255,0,0);
+    textSize(50);
+    textAlign(CENTER,BOTTOM);
+    text("GAME OVER", width/2, height/2);
+    textAlign(CENTER, TOP);
+    textSize(20);
+    text("Number of asteroids shot: " + numberShot.size(), width/2, height/2);
+  }
+}
 
 
 class Star
@@ -280,7 +301,7 @@ class Asteroid extends Floater
     yCorners[3]=-8*rockSize;
     xCorners[4]=-11*rockSize;
     yCorners[4]= 6*rockSize;
-    myColor=color(255);   
+    myColor=color(180);   
     myCenterX=Math.random()*width;
     myCenterY=Math.random()*height;    
     myDirectionX=(Math.random()*4)-2;
@@ -318,11 +339,25 @@ class Asteroid extends Floater
           {
             bullets.remove(i);
             rocks.remove(w);
+            numberShot.add(1);
             break;
          }
       }
     }
+
+    // //IF COLLIDING WITH SHIP
+    // for (int h=0; h<rocks.size();h++)
+    // {
+    //   if(dist((float)(ship.myCenterX),(float)(ship.myCenterY),(float)(rocks.get(h).myCenterX),(float)(rocks.get(h).myCenterY))<=25)
+    //   {
+    //     gameOver=true;
+    //     ship.setDirectionX(0);
+    //     ship.setDirectionY(0);
+    //     break;
+    //   }
+    // }
   }   
+
 
 public void setX(int x) {
     myCenterX=x;
