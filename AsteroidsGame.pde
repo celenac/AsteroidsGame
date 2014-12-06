@@ -22,10 +22,6 @@ public void setup()
     rocks.add(new Asteroid());
   }
   ArrayList <Integer> numberShot=new ArrayList <Integer>();
-   for (int i=0; i<numberShot.size(); i++)
-  {
-    numberShot.remove(i);
-  }
 }
 
 void keyPressed()
