@@ -34,10 +34,6 @@ void keyPressed()
   {
     setup();
     gameOver=false;
-    for(int i=o;i<numberShot.size();i++)
-    {
-      numberShot.remove(i);
-    }
   }
 }
 
