@@ -46,7 +46,7 @@ public void draw()
   rect(0, 0, width, height);
   ship.show();
   ship.move();
-  ship.rotate(5, -5);
+  ship.rotate(8, -8);
   for(int i=0; i<bullets.size(); i++)
   {
     bullets.get(i).show();
