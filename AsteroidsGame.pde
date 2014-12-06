@@ -108,7 +108,7 @@ public void draw()
     textSize(20);
     text("Number of asteroids shot: " + numberShot.size(), width/2, height/2);
     fill(255,255,0);
-    text("press 'r' to restart game", width/2, height/2+200);
+    text("press 'r' to restart game", width/2, height/2+100);
   }
 }
 
