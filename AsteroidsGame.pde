@@ -2,8 +2,8 @@ SpaceShip ship;
 Star [] backgroundStars;
 ArrayList <Asteroid> rocks= new ArrayList <Asteroid>();
 ArrayList <Bullet> bullets=new ArrayList <Bullet>();
-ArrayList <Integer> numberShot=new ArrayList <Integer>();
 boolean gameOver=false;
+ArrayList <Integer> numberShot=new ArrayList <Integer>();
 public void setup() 
 {
   size (800, 800);
@@ -22,10 +22,7 @@ public void setup()
   {
     rocks.add(new Asteroid());
   }
-  for(int r=0; r<numberShot.size();r++)
-  {
-    numberShot.remove(r);
-  }
+  numberShot.size()=0;
 }
 
 void keyPressed()
