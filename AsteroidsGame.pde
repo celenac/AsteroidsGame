@@ -307,8 +307,8 @@ class Asteroid extends Floater
     myColor=color(180);   
     myCenterX=Math.random()*width;
     myCenterY=Math.random()*height;    
-    myDirectionX=(Math.random()*4)-2;
-    myDirectionY=(Math.random()*4)-2;
+    myDirectionX=(Math.random()*6)-2;
+    myDirectionY=(Math.random()*6)-2;
     myPointDirection=Math.random()*360;
   }
    public void move ()   //move the floater in the current direction of travel
