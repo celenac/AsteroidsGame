@@ -32,11 +32,7 @@ void keyPressed()
   }
   if(key=='r')
   {
-    numberShot.size()=0;
-    for(int i=0; i<numberShot.size(); i++)
-    {
-      numberShot.remove(i);
-    }
+    numberShot.clear();
     setup();
     gameOver=false;
   }
